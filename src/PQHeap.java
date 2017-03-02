@@ -14,10 +14,10 @@ public class PQHeap implements PQ {
     @Override
     public Element extractMin() {
         Element max = elements.get(0);
-        elements.set(0, elements.get(elements.size()));
+        elements.set(0, elements.get(elements.size()-1));
         elements.remove(max);
 
-        heapify(elements, 1);
+        heapify(elements, 0);
         return max;
     }
 
@@ -26,14 +26,14 @@ public class PQHeap implements PQ {
         int right = i*2 + 1;
         int largest = i;
 
-        if(left <= elements.size() && elements.get(left).key > elements.get(i).key){
+        if(left <= elements.size()-1 && elements.get(left).key > elements.get(i).key){
             largest = left;
         }
         else {
             largest = i;
         }
 
-        if(right <= elements.size() && elements.get(right).key > elements.get(largest).key) {
+        if(right <= elements.size()-1 && elements.get(right).key > elements.get(largest).key) {
             largest = right;
         }
 
@@ -48,5 +48,20 @@ public class PQHeap implements PQ {
     @Override
     public void insert(Element e) {
         elements.add(e);
+        int i = elements.size()-1;
+        while(i > 0 && parent(e).key < e.key){
+            int index1 = elements.indexOf(parent(e));
+            int index2 = elements.indexOf(e);
+            Element temp = parent(e);
+
+            elements.set(index1, e);
+            elements.set(index2, temp);
+            i = index2;
+        }
+    }
+
+    private Element parent(Element i){
+
+        return elements.get((int) Math.floor(elements.indexOf(i) / 2));
     }
 }
