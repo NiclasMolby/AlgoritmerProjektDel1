@@ -13,11 +13,12 @@ public class PQHeap implements PQ {
 
     @Override
     public Element extractMin() {
-        int max = elements.get(0).key;
-        elements.get(0).key = elements.get(elements.size()).key;
+        Element max = elements.get(0);
+        elements.set(0, elements.get(elements.size()));
         elements.remove(max);
 
-        return elements.get(max);
+        heapify(elements, 1);
+        return max;
     }
 
     private void heapify(ArrayList<Element> elements, int i) {
@@ -37,15 +38,15 @@ public class PQHeap implements PQ {
         }
 
         if(largest != i){
-            int temp = elements.get(i).key;
-            elements.get(i).key = elements.get(largest).key;
-            elements.get(largest).key = temp;
+            Element temp = elements.get(i);
+            elements.set(i, elements.get(largest));
+            elements.set(largest, temp);
             heapify(elements, largest);
         }
     }
 
     @Override
     public void insert(Element e) {
-
+        elements.add(e);
     }
 }
