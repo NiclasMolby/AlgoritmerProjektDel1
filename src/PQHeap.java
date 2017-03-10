@@ -2,7 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Created by niclasmolby on 28/02/2017.
+ * Medlemmer:
+ * Niclas Schilling Mølby: nicmo15
+ * Jebisan Nadarajah: jenad14
+ * Emil Villefrance: emvil15
  */
 public class PQHeap implements PQ {
 
@@ -13,6 +16,10 @@ public class PQHeap implements PQ {
         elements.add(new Element(0,null));
     }
 
+    /**
+     *
+     * @return returnerer det element der har den mindste key værdi
+     */
     @Override
     public Element extractMin() {
         Element min = elements.get(1);
@@ -23,11 +30,16 @@ public class PQHeap implements PQ {
         return min;
     }
 
+    /**
+     *
+     * @param i positionen i array'et, hvor heapify skal starte fra
+     */
     private void heapify(int i) {
         int left = i*2;
         int right = i*2 + 1;
         int min;
 
+        // Tjekker om den nuværende positions venstre barn har en mindre key værdi
         if(left < elements.size() && elements.get(left).key < elements.get(i).key){
             min = left;
         }
@@ -35,16 +47,25 @@ public class PQHeap implements PQ {
             min = i;
         }
 
+        // Tjekker om den nuværene positions højre barn har en mindre key værdi
         if(right < elements.size() && elements.get(right).key < elements.get(min).key) {
             min = right;
         }
 
+        /*
+            Tjekker om forældren har den mindste key værdi
+            hvis ikke skal den byttes ud med den midnste værdi og heapify skal køres igen
+        */
         if(min != i){
             Collections.swap(elements, i, min);
             heapify(min);
         }
     }
 
+    /**
+     *
+     * @param e tilføjer et element til sidst i heapen og ordner heapen, så det nye element kommer hen på den korrekte plads.
+     */
     @Override
     public void insert(Element e) {
         elements.add(e);
@@ -59,8 +80,13 @@ public class PQHeap implements PQ {
         }
     }
 
-    private Element parent(Element i){
+    /**
+     *
+     * @param e det element hvis forældre skal findes
+     * @return returnerer det element der er forældre til det indtastede element
+     */
+    private Element parent(Element e){
 
-        return elements.get((int) Math.floor(elements.indexOf(i) / 2));
+        return elements.get((int) Math.floor(elements.indexOf(e) / 2));
     }
 }
