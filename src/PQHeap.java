@@ -11,6 +11,7 @@ public class PQHeap implements PQ {
 
     private ArrayList<Element> elements;
 
+
     PQHeap(int maxElms){
         elements = new ArrayList<>(maxElms);
         elements.add(new Element(0,null));
@@ -26,7 +27,7 @@ public class PQHeap implements PQ {
         Collections.swap(elements, 1, elements.size()-1);
         elements.remove(elements.size()-1);
 
-        heapify(1);
+        minHeapify(1);
         return min;
     }
 
@@ -34,9 +35,9 @@ public class PQHeap implements PQ {
      *
      * @param i positionen i array'et, hvor heapify skal starte fra
      */
-    private void heapify(int i) {
-        int left = i*2;
-        int right = i*2 + 1;
+    private void minHeapify(int i) {
+        int left = getLeftChild(i);
+        int right = getRightChild(i);
         int min;
 
         // Tjekker om den nuværende positions venstre barn har en mindre key værdi
@@ -58,7 +59,7 @@ public class PQHeap implements PQ {
         */
         if(min != i){
             Collections.swap(elements, i, min);
-            heapify(min);
+            minHeapify(min);
         }
     }
 
@@ -69,24 +70,37 @@ public class PQHeap implements PQ {
     @Override
     public void insert(Element e) {
         elements.add(e);
-        int i = elements.size();
-        while(i > 1 && parent(e).key > e.key){
-            int index1 = elements.indexOf(parent(e));
-            int index2 = elements.indexOf(e);
-
-            Collections.swap(elements,index1, index2);
-
-            i = index1;
+        int i = elements.size() - 1;
+        while(i > 1 && elements.get(getParent(i)).key > e.key){
+            Collections.swap(elements, i, getParent(i));
+            i = getParent(i);
         }
     }
 
     /**
      *
-     * @param e det element hvis forældre skal findes
-     * @return returnerer det element der er forældre til det indtastede element
+     * @param index det index hvis forældre skal findes
+     * @return returnerer det index der er forældre til det indtastede index
      */
-    private Element parent(Element e){
+    private int getParent(int index) {
+        return index / 2;
+    }
 
-        return elements.get((int) Math.floor(elements.indexOf(e) / 2));
+    /**
+     *
+     * @param index det index hvis venstre barn skal findes
+     * @return returnerer det venstre barn til indexet
+     */
+    private int getLeftChild(int index) {
+        return 2 * index;
+    }
+
+    /**
+     *
+     * @param index det index hvis højre barn skal findes
+     * @return returnerer det højre barn til indexet
+     */
+    private int getRightChild(int index) {
+        return 2 * index + 1;
     }
 }
